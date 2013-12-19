@@ -28,12 +28,12 @@ typedef std::pair<polynomial, complex> pair;
 const double small_number = 1e-9;
 const int num_steps = 10000;
 
-auto compare_complex(complex&, complex&) -> int;
-auto find_one_root(polynomial&, complex&) -> complex;
-auto find_roots(polynomial&) -> roots;
-auto derivative(polynomial&) -> polynomial;
-auto evaluate_horner(polynomial&, complex&) -> complex;
-auto horner(polynomial&, complex&) -> pair;
+auto compare_complex(const complex&, const complex&) -> int;
+auto find_one_root(const polynomial&, complex&) -> complex;
+auto find_roots(const polynomial&) -> roots;
+auto derivative(const polynomial&) -> polynomial;
+auto evaluate_horner(const polynomial&, const complex&) -> complex;
+auto horner(const polynomial&, const complex&) -> pair;
 
 // inputs are in argv in decreasing x components
 int main(int argc, const char * argv[]) {
@@ -67,7 +67,7 @@ int main(int argc, const char * argv[]) {
 	
 	roots r = find_roots(args);
 	
-	std::cout << "The roots of the polynomial are:\n";
+	std::cout << "The roots of the polynomial are and of the form (real, imag):\n";
 	for (auto& i : r) {
 		std::cout << i << " ";
 	}
@@ -75,12 +75,12 @@ int main(int argc, const char * argv[]) {
 	std::cout << "\n";
 }
 
-auto compare(complex& x1, complex& x2) -> int {
+auto compare(const complex& x1, const complex& x2) -> int {
 	double difference = abs(x1) - abs(x2);
 	return difference < -small_number ? -1 : (difference > small_number ? 1 : 0);
 }
 
-auto derivative(polynomial& p) -> polynomial {
+auto derivative(const polynomial& p) -> polynomial {
 	size_t size = p.size();
 	polynomial result = polynomial(std::max<unsigned long>(1, size-1));
 	for (int i=1; i<size; ++i) {
@@ -89,11 +89,11 @@ auto derivative(polynomial& p) -> polynomial {
 	return result;
 }
 
-auto evaluate_horner(polynomial& p, complex& c) -> complex {
+auto evaluate_horner(const polynomial& p, const complex& c) -> complex {
 	return horner(p, c).second;
 }
 
-auto horner(polynomial& p, complex& c) -> pair {
+auto horner(const polynomial& p, const complex& c) -> pair {
 	size_t size = p.size();
 	polynomial result = polynomial(std::max<unsigned long>(1, size-1));
 	for (auto i = size-1; i>0; --i) {
@@ -104,7 +104,7 @@ auto horner(polynomial& p, complex& c) -> pair {
 	return std::make_pair(result, toReturn);
 }
 
-auto find_one_root(polynomial& p, complex& c) -> complex {
+auto find_one_root(const polynomial& p, complex& c) -> complex {
 	auto size = p.size()-1;
 	polynomial p1 = derivative(p);
 	polynomial p2 = derivative(p1);
@@ -128,7 +128,7 @@ auto find_one_root(polynomial& p, complex& c) -> complex {
 	return c;
 }
 
-auto find_roots(polynomial& p) -> roots {
+auto find_roots(const polynomial& p) -> roots {
 	roots result;
 	polynomial q = p;
 	
