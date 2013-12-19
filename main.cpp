@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <complex>
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 typedef std::vector<std::complex<double>> roots;
@@ -42,9 +43,10 @@ int main(int argc, const char * argv[]) {
 		std::cerr << "Incorrect number of parameters\n";
 		return EXIT_FAILURE;
 	}
+	double d;
 	for (int i = argc-1; i >= 1; --i) {
-		std::string str = argv[i];
-		double d = atof(str.c_str());
+		std::stringstream sstream(argv[i]);
+		sstream >> d;
 		args.push_back(d);
 	}
 	
